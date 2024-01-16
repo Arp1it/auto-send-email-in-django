@@ -11,11 +11,15 @@ def fetching(requests):
     pass
 
 
-def storing(requests):
-    if requests.method == "POST":
-        mmsg = requests.POST['yourmsg']
-        recemail = requests.POST['receiveremail']
+def storing(request):
+    if request.method == "POST":
+        mmsg = request.POST['yourmsg']
+        recemail = request.POST['receiveremail']
+        sendD = request.POST["sendingdate"]
 
-        print(mmsg, recemail)
+        print(mmsg, recemail, sendD)
+
+        msgsender = MailSender.objects.create(cuser=request.user, msg=mmsg, receiveremail=recemail, sendingdate=sendD)
+        msgsender.save()
 
         return redirect("/")
