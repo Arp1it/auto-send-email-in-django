@@ -3,16 +3,14 @@ from . models import *
 
 
 # Create your views here.
-def main(requests):
-    return render(requests, "index.html")
+def main(request):
+    fetcher = MailSender.objects.all()
 
-
-def fetching(requests):
-    pass
-
+    return render(request, "index.html", context={"fetcher":fetcher})
 
 def storing(request):
     if request.method == "POST":
+        titl = request.POST["titleofe"]
         mmsg = request.POST['yourmsg']
         recemail = request.POST['receiveremail']
         sendD = request.POST["sendingdate"]
