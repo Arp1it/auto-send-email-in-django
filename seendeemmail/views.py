@@ -21,3 +21,8 @@ def storing(request):
         msgsender.save()
 
         return redirect("/")
+    
+def dele(request, sl):
+    delet = MailSender.objects.filter(id=sl).delete()
+
+    return redirect("/")
