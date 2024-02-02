@@ -8,6 +8,7 @@
   <form class="container my-3" method='post' action="/storing">{% csrf_token %}
     <div class="mb-3">Title of Message</label>
       <input type="text" name="titleofe" class="form-control" id="text" aria-describedby="text" required />
+      <button onclick="ai()">Ask ai</button>
     </div>
     <div class="mb-3">
       <label for="text" class="form-label">Your Message</label>
@@ -20,8 +21,8 @@
     </div>
     <div class="mb-3">
       <label for="sendingdate1" class="form-label">Sending Date and Time</label>
-      <input type="datetime-local" name="sendingdate" class="form-control" id="sendingdate1" aria-describedby="emailHelp"
-        required />
+      <input type="datetime-local" name="sendingdate" class="form-control" id="sendingdate1"
+        aria-describedby="emailHelp" required />
     </div>
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" id="exampleCheck1" required />
@@ -36,7 +37,7 @@
 </div>
 
 {% for i in fetcher %}
-  
+
 <div class="my-2 container">
   <div class="my-3">
     <h2>Your email sending details</h2>
@@ -52,10 +53,35 @@
         <footer class="blockquote-footer mt-2">Send on<cite title="Source Title"> {{i.sendingdate}}</cite></footer>
       </blockquote>
     </div>
-    <a href="/del/{{i.id}}" type="button" class="btn btn-outline-danger" >Delete</a>
+    <a href="/del/{{i.id}}" type="button" class="btn btn-outline-danger">Delete</a>
   </div>
 </div>
 
 {% endfor %}
+
+<script>
+  api_key = "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"
+
+  import OpenAI from "openai";
+
+  const openai = new OpenAI();
+
+  const ai = () => {
+
+    a = document.getElementById("text").value
+    // console.log(typeof a)
+    async function main() {
+      const completion = await openai.chat.completions.create({
+        messages: [{ role: "system", content: a }],
+        model: "gpt-3.5-turbo",
+      });
+
+      console.log(completion.choices[0]);
+    }
+
+    main();
+
+  }
+</script>
 
 {% endblock %}
