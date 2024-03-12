@@ -26,3 +26,9 @@ def dele(request, sl):
     delet = MailSender.objects.filter(id=sl).delete()
 
     return redirect("/")
+
+def sigin(request):
+    return render(request, "sigin.html")
+
+def loginn(request):
+    return render(request, "login.html")
