@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from . models import *
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -28,6 +29,18 @@ def dele(request, sl):
     return redirect("/")
 
 def sigin(request):
+    if request.method == "POST":
+        uname = request.POST["name"]
+        email = request.POST["email"]
+        passsword = request.POST["passs1"]
+        cpassword = request.POST["passs2"]
+
+        if passsword == cpassword:
+            user = User.objects.create_user(username=uname, email=email, password=passsword)
+
+        else:
+            return redirect("/")
+
     return render(request, "sigin.html")
 
 def loginn(request):
