@@ -7,4 +7,5 @@ urlpatterns = [
     path("del/<int:sl>",  views.dele, name='delete'),
     path("sigin",  views.sigin, name='sigin'),
     path("loginn",  views.loginn, name='loginn'),
+    path("e",  views.e, name='e'),
 ]

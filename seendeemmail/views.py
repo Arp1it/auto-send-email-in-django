@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from . models import *
 from django.contrib.auth.models import User
+from .task import *
 
 
 # Create your views here.
@@ -45,3 +46,9 @@ def sigin(request):
 
 def loginn(request):
     return render(request, "login.html")
+
+
+def e(request):
+    # sleepy.delay(30)
+    send_mail_task.delay()
+    return HttpResponse("hELLEO,")
