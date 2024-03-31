@@ -17,10 +17,10 @@ def storing(request):
         recemail = request.POST['receiveremail']
         sendD = request.POST["sendingdate"]
 
-        print(mmsg, recemail, sendD)
-
-        msgsender = MailSender.objects.create(cuser=request.user, msg=mmsg, receiveremail=recemail, sendingdate=sendD)
+        msgsender = MailSender.objects.create(cuser=request.user, title=titl, msg=mmsg, receiveremail=recemail, sendingdate=sendD)
         msgsender.save()
+
+        # send_mail_task.delay()
 
         return redirect("/")
     
@@ -48,7 +48,7 @@ def loginn(request):
     return render(request, "login.html")
 
 
-def e(request):
-    # sleepy.delay(30)
-    send_mail_task.delay()
-    return HttpResponse("hELLEO,")
+# def e(request):
+#     # sleepy.delay(30)
+#     send_mail_task.delay()
+#     return HttpResponse("hELLEO,")

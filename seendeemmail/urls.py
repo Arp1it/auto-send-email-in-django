@@ -1,5 +1,7 @@
 from django.urls import path, include
 from . import views
+# from .task import *
+# from django.confs.urls.defaults import *
 
 urlpatterns = [
     path("",  views.main, name='home'),
@@ -7,5 +9,7 @@ urlpatterns = [
     path("del/<int:sl>",  views.dele, name='delete'),
     path("sigin",  views.sigin, name='sigin'),
     path("loginn",  views.loginn, name='loginn'),
-    path("e",  views.e, name='e'),
+    # path("e",  views.e, name='e'),
 ]
+
+# send_mail_task()
