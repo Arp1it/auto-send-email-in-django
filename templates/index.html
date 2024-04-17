@@ -58,4 +58,32 @@
 
 {% endfor %}
 
+<script>
+  // frontend.js
+document.addEventListener("DOMContentLoaded", function() {
+    var socket = new WebSocket("ws://" + window.location.host + "/ws/frontend_updates/");
+    
+    socket.onmessage = function(event) {
+        var message = event.data;
+        // Handle the received message, e.g., update the UI
+        console.log("Received message from server:", message);
+        // For example, update a DOM element to reflect the deletion
+        // document.getElementById("update-message").innerText = "Data deleted from the database";
+    };
+
+    socket.onopen = function() {
+        console.log("WebSocket connection established");
+    };
+
+    socket.onclose = function(event) {
+        console.log("WebSocket connection closed:", event.reason);
+    };
+
+    socket.onerror = function(error) {
+        console.error("WebSocket error:", error);
+    };
+});
+
+</script>
+
 {% endblock %}

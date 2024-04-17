@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'seendeemmail',
+    'channels'
 ]
+
+EXTERNAL_APPS = [
+    "seendeemmail",
+]
+
+INSTALLED_APPS = INSTALLED_APPS + EXTERNAL_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,7 +77,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'seendeeemailoauto.wsgi.application'
+# WSGI_APPLICATION = 'seendeeemailoauto.wsgi.application'
+ASGI_APPLICATION = 'seendeeemailoauto.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 
 # Database

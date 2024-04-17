@@ -5,6 +5,10 @@ import datetime
 from django.core.mail import send_mail
 from termcolor import colored
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+
 class Command(BaseCommand):
     help = 'Runs my function continuously'
 
@@ -23,6 +27,11 @@ class Command(BaseCommand):
                                     [bs.receiveremail],
                                     fail_silently=False)
                             MailSender.objects.filter(id=bs.id).delete()
+                            # Notify frontend via Channels about the deletion
+                            channel_layer = get_channel_layer()
+                            async_to_sync(channel_layer.group_send)(
+                                "frontend_updates", {"type": "data_deleted"}
+                            )
 
             except KeyboardInterrupt:
                 print(colored("KeyboardInterrupt", "red"))
