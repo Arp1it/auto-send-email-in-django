@@ -37,7 +37,7 @@
 
 {% for i in fetcher %}
 
-<div class="my-2 container">
+<div class="my-2 container" id="{{i.id}}">
   <div class="my-3">
     <h2>Your email sending details</h2>
   </div>
@@ -67,6 +67,8 @@ document.addEventListener("DOMContentLoaded", function() {
         var message = event.data;
         // Handle the received message, e.g., update the UI
         console.log("Received message from server:", message);
+        // console.log(document.getElementById(message))
+        document.getElementById(message).remove()
         // For example, update a DOM element to reflect the deletion
         // document.getElementById("update-message").innerText = "Data deleted from the database";
     };

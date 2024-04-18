@@ -30,7 +30,7 @@ class Command(BaseCommand):
                             # Notify frontend via Channels about the deletion
                             channel_layer = get_channel_layer()
                             async_to_sync(channel_layer.group_send)(
-                                "frontend_updates", {"type": "data_deleted"}
+                                "frontend_updates", {"type": "data_deleted", "data": bs.id}
                             )
 
             except KeyboardInterrupt:

@@ -1,2 +1,0 @@
-Configure all files correctly -
-index.html, seendeemmail/consumers.py, seendeemmail/routing.py, seendeemmail/management/commands/mycommand.py, seendeeemailoauto/asgi.py, seendeeemailoauto/settings.py 

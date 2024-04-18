@@ -38,12 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'seendeemmail',
     'channels'
 ]
 
 EXTERNAL_APPS = [
-    "seendeemmail",
+    "seendeemmail"
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + EXTERNAL_APPS
