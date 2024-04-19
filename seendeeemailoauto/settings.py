@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +48,7 @@ EXTERNAL_APPS = [
 
 INSTALLED_APPS = INSTALLED_APPS + EXTERNAL_APPS
 
+AUTH_USER_MODEL = "seendeemmail.CustomUser"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

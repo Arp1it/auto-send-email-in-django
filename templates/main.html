@@ -26,6 +26,21 @@
               <a class="nav-link disabled" aria-disabled="true">Disabled</a>
             </li>
           </ul>
+
+          
+          {% if request.user.is_authenticated %}
+          <a class="position-absolute end-0 mx-3 btn btn-danger" type="button" href="/loggout">Logout</a>
+          {% elif request.path == "/loginn" %}
+          <a class="btn btn-success position-absolute end-0 mx-3" type="button" href="/sigin">Sign in</a>
+          {% else %}
+          <a class="position-absolute end-0 mx-3 btn btn-success" type="button" href="/loginn">Login</a>
+          {% endif %}
+
+          <!-- Current path: {{ request.path }}
+          Full URL: {{ request.build_absolute_uri }}
+          URL with query string: {{ request.get_full_path }} -->
+
+
         </div>
       </div>
     </nav>
