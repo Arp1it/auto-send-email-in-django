@@ -1,21 +1,25 @@
 {% extends 'main.html' %}
 
 {% block body %}
-<div class="container">
+<div class="container my-3">
   <div class="my-3">
     <h2>Emails Details filled Here</h2>
   </div>
   <form class="container my-3" method='post' action="/storing">{% csrf_token %}
     <div class="mb-3">Title of Message</label>
-      <input type="text" name="titleofe" class="form-control" id="text" aria-describedby="text" required />
+      <input type="text" name="titleofe" class="form-control" id="text" placeholder="Title of message" aria-describedby="text" required />
     </div>
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label for="text" class="form-label">Your Message</label>
-      <input type="text" name="yourmsg" class="form-control" id="text" aria-describedby="text" required />
+      <input type="text" class="form-control" id="text" aria-describedby="text" required />
+    </div> -->
+    <div class="mb-3">
+      <label for="floatingTextarea">Your Message</label>
+      <textarea class="form-control" name="yourmsg" placeholder="Write your message Here" rows="3" id="floatingTextarea" required></textarea>
     </div>
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">Receiver Email address</label>
-      <input type="email" name="receiveremail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+      <input type="email" name="receiveremail" class="form-control" id="exampleInputEmail1" placeholder="example12@gmail.com" aria-describedby="emailHelp"
         required />
     </div>
     <div class="mb-3">

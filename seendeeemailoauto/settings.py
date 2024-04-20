@@ -156,3 +156,12 @@ EMAIL_HOST_USER = 'your gmail'
 EMAIL_HOST_PASSWORD = 'your password'
 EMAIL_PORT = 587
 EMAIL_USER_SSL = False
+
+
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+    50: "critical"
+}

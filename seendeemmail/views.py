@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .task import *
+from django.contrib import messages
 
 from django.contrib.auth import get_user_model
 
@@ -38,48 +39,71 @@ def dele(request, sl):
 
     return redirect("/")
 
-def sigin(request):
-    if request.method == "POST":
-        uname = request.POST["name"]
-        email = request.POST["email"]
-        passsword = request.POST["passs1"]
-        cpassword = request.POST["passs2"]
 
-        if passsword == cpassword:
-            try:
-                user = User.objects.create_user(username=uname, email=email, password=passsword)
-                user.save()
+def authenticator(request, username, email, password, path):
+    userr = authenticate(username=username, email=email, password=password)
 
-                userr = authenticate(username=uname, email=email, password=passsword)
-
-                if userr is not None:
-                    login(request, userr)
-                    return redirect("/")
-                
-            except Exception as e:
-                print(e)
-                return redirect("/")
-
-        else:
+    if userr is not None:
+        login(request, userr)
+        if path == "/loginn":
+            messages.success(request, "Successfully logged in!")
             return redirect("/")
+        else:
+            messages.success(request, "Successfully signed in!")
+        return redirect("/")
+    
+    else:
+        if path == "/loginn":
+            messages.error(request, "Login failed. Please try again.")
+        else:
+            messages.error(request, "Sigin failed. Please try again.")
+        return redirect(f"/{path}")
 
-    return render(request, "sigin.html")
+
+def sigin(request):
+    if request.user.is_authenticated:
+        return redirect("/")
+    
+    else:
+        if request.method == "POST":
+            uname = request.POST["name"]
+            email = request.POST["email"]
+            passsword = request.POST["passs1"]
+            cpassword = request.POST["passs2"]
+
+            if passsword == cpassword:
+                try:
+                    user = User.objects.create_user(username=uname, email=email, password=passsword)
+                    user.save()
+
+                    path = request.path
+                    authenticator(request, username=uname, email=email, password=passsword, path=path)
+                    
+                except Exception as e:
+                    print(e)
+                    return redirect("/sigin")
+
+            else:
+                return redirect("/sigin")
+
+        return render(request, "sigin.html")
 
 def loginn(request):
-    if request.method == "POST":
-        loginusername = request.POST['username']
-        uemail = request.POST["email"]
-        uspasw = request.POST["pasw"]
+    if request.user.is_authenticated:
+        return redirect("/")
+    
+    else:
+        if request.method == "POST":
+            loginusername = request.POST['username']
+            uemail = request.POST["email"]
+            uspasw = request.POST["pasw"]
 
-        userr = authenticate(username=loginusername, email=uemail, password=uspasw)
+            path = request.path
+            authenticator(request, username=loginusername, email=uemail, password=uspasw, path=path)
 
-        if userr is not None:
-            login(request, userr)
-            return redirect("/")
-
-        return redirect("/loginn")
-        
-    return render(request, "login.html")
+            return redirect("/loginn")
+            
+        return render(request, "login.html")
 
 
 @login_required(login_url="/loginn")
