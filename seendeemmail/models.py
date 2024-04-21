@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.conf import settings
 
+# from django.contrib.auth.hashers import make_password
+
 
 from django.contrib.auth.models import AbstractUser
 from .manager import UserManager
@@ -10,9 +12,16 @@ from .manager import UserManager
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
+    user_email_password = models.CharField(max_length=100)  # Adjust max_length as needed
 
     REQUIRED_FIELDS = []
     objects = UserManager()
+
+    # def save(self, *args, **kwargs):
+    #     # Hash the password before saving
+    #     if self.user_email_password:
+    #         self.user_email_password = make_password(self.user_email_password)
+    #     super().save(*args, **kwargs)
 
 
 

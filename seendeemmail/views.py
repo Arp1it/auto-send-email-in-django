@@ -29,8 +29,6 @@ def storing(request):
         msgsender = MailSender.objects.create(cuser=request.user, title=titl, msg=mmsg, receiveremail=recemail, sendingdate=sendD)
         msgsender.save()
 
-        # send_mail_task.delay()
-
         return redirect("/")
 
 @login_required(login_url="/loginn")
@@ -43,21 +41,22 @@ def dele(request, sl):
 def authenticator(request, username, email, password, path):
     userr = authenticate(username=username, email=email, password=password)
 
+    print(path)
+
     if userr is not None:
         login(request, userr)
         if path == "/loginn":
             messages.success(request, "Successfully logged in!")
-            return redirect("/")
-        else:
+        elif path == "/sigin":
             messages.success(request, "Successfully signed in!")
-        return redirect("/")
     
     else:
         if path == "/loginn":
             messages.error(request, "Login failed. Please try again.")
-        else:
+            # return redirect(f"/{path}")
+        elif path == "/sigin":
             messages.error(request, "Sigin failed. Please try again.")
-        return redirect(f"/{path}")
+            # return redirect(f"/{path}")
 
 
 def sigin(request):
@@ -70,17 +69,21 @@ def sigin(request):
             email = request.POST["email"]
             passsword = request.POST["passs1"]
             cpassword = request.POST["passs2"]
+            empass = request.POST["passs3"]
 
             if passsword == cpassword:
                 try:
-                    user = User.objects.create_user(username=uname, email=email, password=passsword)
+                    user = User.objects.create_user(username=uname, email=email, password=passsword, user_email_password=empass)
                     user.save()
 
                     path = request.path
                     authenticator(request, username=uname, email=email, password=passsword, path=path)
+
+                    return redirect("/sigin")
                     
                 except Exception as e:
                     print(e)
+                    messages.error(request, "Sigin failed. Please try again.")
                     return redirect("/sigin")
 
             else:

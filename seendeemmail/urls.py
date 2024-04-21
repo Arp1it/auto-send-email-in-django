@@ -13,5 +13,3 @@ urlpatterns = [
     path("loggout",  views.loggout, name='loggout'),
     # path("e",  views.e, name='e'),
 ]
-
-# send_mail_task()

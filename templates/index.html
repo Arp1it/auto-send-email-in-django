@@ -18,9 +18,8 @@
       <textarea class="form-control" name="yourmsg" placeholder="Write your message Here" rows="3" id="floatingTextarea" required></textarea>
     </div>
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Receiver Email address</label>
-      <input type="email" name="receiveremail" class="form-control" id="exampleInputEmail1" placeholder="example12@gmail.com" aria-describedby="emailHelp"
-        required />
+      <label for="exampleInputEmail1" class="form-label">Receivers Email address</label>
+      <input type="email" name="receiveremail" class="form-control" id="exampleInputEmail1" placeholder="example12@gmail.com" aria-describedby="emailHelp" multiple required />
     </div>
     <div class="mb-3">
       <label for="sendingdate1" class="form-label">Sending Date and Time</label>
@@ -68,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var socket = new WebSocket("ws://" + window.location.host + "/ws/frontend_updates/");
     
     socket.onmessage = function(event) {
+        if (event.data){
         var message = event.data;
         // Handle the received message, e.g., update the UI
         console.log("Received message from server:", message);
@@ -75,6 +75,11 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById(message).remove()
         // For example, update a DOM element to reflect the deletion
         // document.getElementById("update-message").innerText = "Data deleted from the database";
+        }
+
+        else if(event.message){
+          console.log(data.message)
+        }
     };
 
     socket.onopen = function() {

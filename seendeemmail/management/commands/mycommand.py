@@ -1,12 +1,18 @@
 from django.core.management.base import BaseCommand
+
 from seendeemmail.task import send_mail_task
+# from django.core.mail import send_mail
+
 from seendeemmail.models import *
 import datetime
-from django.core.mail import send_mail
 from termcolor import colored
 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Command(BaseCommand):
@@ -15,18 +21,19 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         while True:
             try:
-                # send_mail_task.delay()
                 b = MailSender.objects.all()
                 a = datetime.datetime.now()
+                u = User.objects.all()
+
 
                 if len(b) > 0:
                     for bs in b:
                         if f"{a.date()}T{a.strftime('%H:%M')}" >= bs.sendingdate:
-                            send_mail(bs.title, bs.msg,
-                                    "your gamil",
-                                    [bs.receiveremail],
-                                    fail_silently=False)
+
+                            send_mail_task.delay(from_email=bs.cuser.email, emaillist=bs.receiveremail, subject=bs.title, message=bs.msg, aut_user=bs.cuser.email, aut_password=bs.cuser.user_email_password)
+
                             MailSender.objects.filter(id=bs.id).delete()
+
                             # Notify frontend via Channels about the deletion
                             channel_layer = get_channel_layer()
                             async_to_sync(channel_layer.group_send)(

@@ -6,6 +6,7 @@ class UserManager(BaseUserManager):
 
         extra_fields.setdefault("email", "")
         extra_fields['email'] = self.normalize_email(extra_fields['email'])
+        extra_fields['user_email_password'] = extra_fields['user_email_password']
         user = self.model(**extra_fields)
         user.set_password(password)
         user.save(using=self.db)

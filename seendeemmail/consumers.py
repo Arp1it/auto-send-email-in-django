@@ -10,3 +10,6 @@ class FrontendConsumer(AsyncWebsocketConsumer):
 
     async def data_deleted(self, event):
         await self.send(text_data=str(event["data"]))
+
+    async def error_send(self, event):
+        await self.send(text_data=str(event["message"]))
