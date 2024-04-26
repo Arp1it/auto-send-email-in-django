@@ -63,10 +63,6 @@ def send_mail_task(emaillist, from_email, subject, message, aut_user, aut_passwo
 
         except Exception as e:
             print(e)
-            # channel_layer = get_channel_layer()
-            # async_to_sync(channel_layer.group_send)(
-            #     "frontend_updates", {"type": "error_send", "message":f"{emai} not exists"}
-            # )
 
     return None
 

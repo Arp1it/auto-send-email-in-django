@@ -5,7 +5,7 @@
   <div class="my-3">
     <h2>Emails Details filled Here</h2>
   </div>
-  <form class="container my-3" method='post' action="/storing">{% csrf_token %}
+  <!-- <form class="container my-3" method='post' action="/storing">{% csrf_token %} -->
     <div class="mb-3">Title of Message</label>
       <input type="text" name="titleofe" class="form-control" id="text" placeholder="Title of message" aria-describedby="text" required />
     </div>
@@ -30,8 +30,8 @@
       <input type="checkbox" class="form-check-input" id="exampleCheck1" required />
       <label class="form-check-label" for="exampleCheck1">Terms and condition applied</label>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    <button type="submit" class="btn btn-primary" onclick="sendMessage()">Submit</button>
+  <!-- </form> -->
 </div>
 
 <div class="my-3">
@@ -63,22 +63,26 @@
 
 <script>
   // frontend.js
-document.addEventListener("DOMContentLoaded", function() {
-    var socket = new WebSocket("ws://" + window.location.host + "/ws/frontend_updates/");
-    
+    let url = "ws://" + window.location.host + "/ws/frontend_updates/"
+    let sender = "{{request.user.id}}"
+
+    let socket = new WebSocket(url)
+
+    // console.log(sender)
+
     socket.onmessage = function(event) {
-        if (event.data){
-        var message = event.data;
+      let message = JSON.parse(event.data);
+        if (message.payloads){
+          updateUI(message.payloads.msg, message.payloads.reemail, message.payloads.title, message.payloads.sedat)
+        }
+
+        else{
         // Handle the received message, e.g., update the UI
-        console.log("Received message from server:", message);
+        // console.log("Received message from server:", message);
         // console.log(document.getElementById(message))
         document.getElementById(message).remove()
         // For example, update a DOM element to reflect the deletion
         // document.getElementById("update-message").innerText = "Data deleted from the database";
-        }
-
-        else if(event.message){
-          console.log(data.message)
         }
     };
 
@@ -93,7 +97,29 @@ document.addEventListener("DOMContentLoaded", function() {
     socket.onerror = function(error) {
         console.error("WebSocket error:", error);
     };
-});
+
+
+  const sendMessage = () =>{
+    let title = document.getElementById("text")
+    let message = document.getElementById("floatingTextarea")
+    let receiveremail = document.getElementById("exampleInputEmail1")
+    let sendingdate = document.getElementById("sendingdate1")
+    
+    console.log(title.value, message.value, receiveremail.value, sendingdate.value, sender)
+
+    socket.send(JSON.stringify({"title":title.value, "message": message.value, "recemail": receiveremail.value, "sedate":sendingdate.value, sende:sender}))
+
+    title.value = ""
+    message.value = ""
+    receiveremail.value = ""
+    sendingdate.value = ""
+
+  }
+
+  const updateUI = (message, reemail, title, sedate) =>{
+    console.log(`Update ui - ${message}, ${reemail}, ${title}, ${sedate}`)
+    
+  }
 
 </script>
 
