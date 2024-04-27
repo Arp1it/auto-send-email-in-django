@@ -25,11 +25,13 @@ class FrontendConsumer(AsyncWebsocketConsumer):
         print(usr)
 
         # Create and save the MailSender object asynchronously
-        await sync_to_async(MailSender.objects.create)(
+        mail_sending = await sync_to_async(MailSender.objects.create)(
             cuser=usr, title=title, msg=message, receiveremail=reemail, sendingdate=sedate
         )
 
-        payload = {"title": title, "msg": message, "reemail": reemail, "sedat": sedate}
+        mail_id = mail_sending.id
+
+        payload = {"title": title, "msg": message, "reemail": reemail, "sedat": sedate, "mail_id": mail_id}
         print(payload)
 
         await self.channel_layer.group_send(

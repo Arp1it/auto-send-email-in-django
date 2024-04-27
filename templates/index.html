@@ -38,6 +38,7 @@
   <hr />
 </div>
 
+<div id="mailwaitinginqueue">
 {% for i in fetcher %}
 
 <div class="my-2 container" id="{{i.id}}">
@@ -60,6 +61,7 @@
 </div>
 
 {% endfor %}
+</div>
 
 <script>
   // frontend.js
@@ -73,13 +75,12 @@
     socket.onmessage = function(event) {
       let message = JSON.parse(event.data);
         if (message.payloads){
-          updateUI(message.payloads.msg, message.payloads.reemail, message.payloads.title, message.payloads.sedat)
+          updateUI(message.payloads.msg, message.payloads.reemail, message.payloads.title, message.payloads.sedat, message.payloads.mail_id)
         }
 
         else{
         // Handle the received message, e.g., update the UI
         // console.log("Received message from server:", message);
-        // console.log(document.getElementById(message))
         document.getElementById(message).remove()
         // For example, update a DOM element to reflect the deletion
         // document.getElementById("update-message").innerText = "Data deleted from the database";
@@ -105,7 +106,7 @@
     let receiveremail = document.getElementById("exampleInputEmail1")
     let sendingdate = document.getElementById("sendingdate1")
     
-    console.log(title.value, message.value, receiveremail.value, sendingdate.value, sender)
+    // console.log(title.value, message.value, receiveremail.value, sendingdate.value, sender)
 
     socket.send(JSON.stringify({"title":title.value, "message": message.value, "recemail": receiveremail.value, "sedate":sendingdate.value, sende:sender}))
 
@@ -116,9 +117,27 @@
 
   }
 
-  const updateUI = (message, reemail, title, sedate) =>{
-    console.log(`Update ui - ${message}, ${reemail}, ${title}, ${sedate}`)
-    
+  const updateUI = (message, reemail, title, sedate, mailid) =>{
+    console.log(`Update ui - ${message}, ${reemail}, ${title}, ${sedate}, ${mailid}`)
+
+    document.getElementById("mailwaitinginqueue").innerHTML += `<div class="my-2 container" id="${mailid}">
+  <div class="my-3">
+    <h2>Your email sending details</h2>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      ${title}
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <p><b>To:</b> ${reemail}</i></p>
+        <p><b>Message:</b> ${message}</i></p>
+        <footer class="blockquote-footer mt-2">Send on<cite title="Source Title"> ${sedate}</cite></footer>
+      </blockquote>
+    </div>
+    <a href="/del/${mailid}" type="button" class="btn btn-outline-danger">Delete</a>
+  </div>
+</div>`
   }
 
 </script>
