@@ -15,31 +15,39 @@ class FrontendConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
 
-        title = data.get("title")
-        message = data.get("message")
-        reemail = data.get("recemail")
-        sedate = data.get("sedate")
+        if data.get("delid"):
+            await sync_to_async(MailSender.objects.filter(id=int(data.get("delid"))).delete)()
 
-        usr_id = data.get("sende")
-        usr = await sync_to_async(User.objects.get)(id=usr_id)
-        print(usr)
+            await self.channel_layer.group_send(
+            "frontend_updates", {"type": "data_deleted", "data": data.get("delid"), "message":"Successfully send the message"}
+            )
 
-        # Create and save the MailSender object asynchronously
-        mail_sending = await sync_to_async(MailSender.objects.create)(
-            cuser=usr, title=title, msg=message, receiveremail=reemail, sendingdate=sedate
-        )
+        else:
+            title = data.get("title")
+            message = data.get("message")
+            reemail = data.get("recemail")
+            sedate = data.get("sedate")
 
-        mail_id = mail_sending.id
+            usr_id = data.get("sende")
+            usr = await sync_to_async(User.objects.get)(id=usr_id)
+            print(usr)
 
-        payload = {"title": title, "msg": message, "reemail": reemail, "sedat": sedate, "mail_id": mail_id}
-        print(payload)
+            # Create and save the MailSender object asynchronously
+            mail_sending = await sync_to_async(MailSender.objects.create)(
+                cuser=usr, title=title, msg=message, receiveremail=reemail, sendingdate=sedate
+            )
 
-        await self.channel_layer.group_send(
-            f"frontend_updates", {
-                "type": "send_message",
-                'values': json.dumps(payload)
-            }
-        )
+            mail_id = mail_sending.id
+
+            payload = {"title": title, "msg": message, "reemail": reemail, "sedat": sedate, "mail_id": mail_id}
+            print(payload)
+
+            await self.channel_layer.group_send(
+                f"frontend_updates", {
+                    "type": "send_message",
+                    'values': json.dumps(payload)
+                }
+            )
 
     async def send_message(self, text_data):
         data = json.loads(text_data.get("values"))
