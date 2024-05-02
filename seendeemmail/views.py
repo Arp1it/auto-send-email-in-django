@@ -117,6 +117,11 @@ def loggout(request):
 
     else:
         return redirect("/sigin")
+    
+
+@login_required(login_url="/loginn")
+def passupdate(request):
+    return render(request, "passupdate.html")
 
 
 # def e(request):

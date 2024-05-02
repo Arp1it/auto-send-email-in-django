@@ -11,5 +11,6 @@ urlpatterns = [
     path("sigin",  views.sigin, name='sigin'),
     path("loginn",  views.loginn, name='loginn'),
     path("loggout",  views.loggout, name='loggout'),
+    path("passupdate",  views.passupdate, name='passupdate'),
     # path("e",  views.e, name='e'),
 ]
